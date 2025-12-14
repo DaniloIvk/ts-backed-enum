@@ -1,0 +1,37 @@
+{
+  "name": "@daniloivk/ts-backed-enum",
+  "type": "module",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Runtime-backed enums inspired by PHP enums, built for modern TypeScript",
+  "author": "Danilo.Ivk",
+  "keywords": [
+    "typescript",
+    "traits"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaniloIvk/ts-backed-enum.git"
+  },
+  "dependencies": {
+    "@daniloivk/ts-traits": "github:daniloivk/ts-traits"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  }
+}
