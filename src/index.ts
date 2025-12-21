@@ -42,7 +42,7 @@ export type EnumContract<E extends EnumLike, C> = {
 
 export type EnumHelpers<E extends EnumLike, C> = {
   readonly cases: readonly C[];
-  from(value: EnumValue<E>): C | undefined;
+  from(value: unknown): C | undefined;
   values(): readonly EnumValue<E>[];
 };
 
@@ -89,8 +89,18 @@ export function createBackedEnum(
       }
     }
 
-    from(value: EnumValue<typeof baseEnum>) {
-      return this.map.get(value);
+    from(value: unknown): InstanceType<typeof CaseClass> | undefined {
+      const valueType = typeof value;
+
+      if (value instanceof CaseClass) {
+        return this.from(value.value);
+      }
+
+      if (valueType !== 'string' && valueType !== 'number') {
+        return undefined;
+      }
+
+      return this.map.get(value as string | number);
     }
 
     values() {

@@ -31,6 +31,13 @@ export function createBackedEnum(baseEnum, CaseClass = EnumCase) {
             }
         }
         from(value) {
+            const valueType = typeof value;
+            if (value instanceof CaseClass) {
+                return this.from(value.value);
+            }
+            if (valueType !== 'string' && valueType !== 'number') {
+                return undefined;
+            }
             return this.map.get(value);
         }
         values() {
