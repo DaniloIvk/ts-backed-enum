@@ -3,7 +3,7 @@ import withTraits from '@daniloivk/ts-traits';
 type Constructor<T = {}> = new (...args: any[]) => T;
 
 type UnionToIntersection<U> = (U extends any ? (x: U) => void : never) extends (
-  x: infer I
+  x: infer I,
 ) => void
   ? I
   : never;
@@ -11,16 +11,19 @@ type UnionToIntersection<U> = (U extends any ? (x: U) => void : never) extends (
 type InstanceIntersection<T extends readonly Constructor[]> =
   UnionToIntersection<InstanceType<T[number]>>;
 
-type EnumLike = Readonly<Record<string, string | number>>;
+export type EnumLike = Readonly<Record<string, string | number>>;
 
-type EnumValue<E extends EnumLike> = E[keyof E];
-type EnumKey<E extends EnumLike> = Exclude<keyof E, number>;
+export type EnumValue<E extends EnumLike> = E[keyof E];
+export type EnumKey<E extends EnumLike> = Exclude<keyof E, number>;
 
 export class EnumCase<
   K extends string = string,
-  V extends string | number = string | number
+  V extends string | number = string | number,
 > {
-  constructor(public readonly name: K, public readonly value: V) {}
+  constructor(
+    public readonly name: K,
+    public readonly value: V,
+  ) {}
 
   toString(): string {
     return String(this.value);
@@ -31,7 +34,7 @@ export function createEnumCase<T extends readonly Constructor[]>(...traits: T) {
   return withTraits(EnumCase, ...traits) as unknown as {
     new <K extends string, V extends string | number>(
       name: K,
-      value: V
+      value: V,
     ): EnumCase<K, V> & InstanceIntersection<T>;
   };
 }
@@ -49,21 +52,21 @@ export type EnumHelpers<E extends EnumLike, C> = {
 // With custom case class
 export function createBackedEnum<
   E extends EnumLike,
-  C extends EnumCase<EnumKey<E> & string, EnumValue<E>>
+  C extends EnumCase<EnumKey<E> & string, EnumValue<E>>,
 >(
   baseEnum: E,
-  CaseClass: new (name: EnumKey<E>, value: EnumValue<E>) => C
+  CaseClass: new (name: EnumKey<E>, value: EnumValue<E>) => C,
 ): EnumContract<E, C> & EnumHelpers<E, C>;
 
 // Default case
 export function createBackedEnum<E extends EnumLike>(
-  baseEnum: E
+  baseEnum: E,
 ): EnumContract<E, EnumCase<EnumKey<E> & string, EnumValue<E>>> &
   EnumHelpers<E, EnumCase<EnumKey<E> & string, EnumValue<E>>>;
 
 export function createBackedEnum(
   baseEnum: EnumLike,
-  CaseClass: Constructor<EnumCase> = EnumCase
+  CaseClass: Constructor<EnumCase> = EnumCase,
 ) {
   const keys = Object.keys(baseEnum).filter((key) => isNaN(Number(key)));
 

@@ -1,9 +1,9 @@
 type Constructor<T = {}> = new (...args: any[]) => T;
 type UnionToIntersection<U> = (U extends any ? (x: U) => void : never) extends (x: infer I) => void ? I : never;
 type InstanceIntersection<T extends readonly Constructor[]> = UnionToIntersection<InstanceType<T[number]>>;
-type EnumLike = Readonly<Record<string, string | number>>;
-type EnumValue<E extends EnumLike> = E[keyof E];
-type EnumKey<E extends EnumLike> = Exclude<keyof E, number>;
+export type EnumLike = Readonly<Record<string, string | number>>;
+export type EnumValue<E extends EnumLike> = E[keyof E];
+export type EnumKey<E extends EnumLike> = Exclude<keyof E, number>;
 export declare class EnumCase<K extends string = string, V extends string | number = string | number> {
     readonly name: K;
     readonly value: V;
